@@ -15,3 +15,9 @@ No necesita servidor, base de datos, cuentas ni claves. Los puntos solo existen 
 - Selector de conversación concreta o aleatoria
 
 Las conversaciones A están en `data/conversations.json`. Las variantes B y C están en `data/variants.json`.
+
+## Español en juego: aventuras de plataformas
+
+The homepage also links to `aventuras/`, a selection page for School Escape and AYER: El misterio de la mochila (regular/irregular preterite, Junior Cycle). AYER is implemented in `aventuras/ayer/` with its own four maps, original art, verb notebook and local Mission Report. School Escape retains its existing public URL for the Friday lesson.
+
+The site is served from this repository root on GitHub Pages. New adventures can be added as separate folders under `aventuras/`; add a card to the selection page when an adventure is ready.
