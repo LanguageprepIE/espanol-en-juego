@@ -4,3 +4,15 @@
 .boss-option{display:block;width:100%;text-align:left;margin:10px 0!important;background:#dbe8df;border-color:#80aa99}.boss-count{font-weight:800;color:#446958}
 header{max-width:1280px;flex-wrap:wrap}.home{color:#c6e7e2;font-size:14px}nav{flex-wrap:wrap}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #bdc8c8;padding:7px;text-align:left}.scroll{overflow:auto}.danger{color:#ff98b9}.overlay{overflow:auto}.overlay p{font-size:15px;line-height:1.45}.overlay h1{font-family:monospace;letter-spacing:8px}dialog button{min-height:44px}dialog .option{display:block;width:100%;text-align:left}#writing{min-height:145px}.helper{background:#e0e8df;padding:12px;border-radius:6px}details{margin:12px 0}.touch button{touch-action:manipulation}#toast{min-height:44px}@media(max-width:600px){nav{justify-content:center}nav button{font-size:12px;padding:8px}.overlay{padding:12px}.overlay p{font-size:12px}.overlay h1{font-size:24px;margin:5px}.overlay button{margin:5px}.touch{gap:6px}.touch button{padding:10px}.scroll table{min-width:630px}}
 @media print{#dialogBody > :not(#preview){display:none!important}#preview{display:block!important;white-space:pre-wrap}}
+
+/* Mobile and tablet accessibility; touch controls only on coarse pointer devices. */
+.overlay{display:flex;flex-direction:column;align-items:center;justify-content:safe center;overflow-y:auto;overscroll-behavior:contain;min-height:0;max-height:100%}.overlay h1,.overlay p,.overlay button{flex-shrink:0}
+.mobile-controls{display:none}
+@media(pointer:coarse){
+ .legacy-controls{display:none!important}.mobile-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 8px;user-select:none;-webkit-user-select:none}
+ .joystick{position:relative;flex:0 0 126px;width:126px;height:126px;border-radius:50%;border:3px solid #91b9d1;background:#29445d;touch-action:none;box-shadow:inset 0 0 0 13px #20384d}
+ .joystick-knob{position:absolute;left:50%;top:50%;width:55px;height:55px;border-radius:50%;background:#78d3e1;border:3px solid #e2f7fa;transform:translate(-50%,-50%);pointer-events:none}
+ .mobile-actions{display:flex;align-items:center;gap:12px;touch-action:none}.mobile-actions button{border-radius:50%;width:72px;height:72px;padding:4px;touch-action:none;font-size:13px}#touchJump{width:92px;height:92px;background:#ffcf67}#touchTalk{background:#8ee0bc}
+}
+@media(max-width:700px){.stage{overflow:visible}.overlay{position:relative;inset:auto;max-height:none;overflow:visible;border-radius:8px;padding:14px 10px}.overlay:empty{display:none}.overlay h1{font-size:clamp(20px,6vw,30px);margin:6px}.overlay p{font-size:14px;line-height:1.4;margin:5px auto}.overlay button{width:min(100%,320px);min-height:44px;margin:8px auto}dialog{max-height:calc(100dvh - 24px);overflow-y:auto;padding:14px}}
+@media(pointer:coarse) and (max-width:380px){.joystick{flex-basis:108px;width:108px;height:108px}.mobile-actions{gap:6px}.mobile-actions button{width:62px;height:62px}#touchJump{width:76px;height:76px}}
