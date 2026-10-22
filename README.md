@@ -21,3 +21,9 @@ Las conversaciones A están en `data/conversations.json`. Las variantes B y C es
 The homepage also links to `aventuras/`, a selection page for School Escape and AYER: El misterio de la mochila (regular/irregular preterite, Junior Cycle). AYER is implemented in `aventuras/ayer/` with its own four maps, original art, verb notebook and local Mission Report. School Escape retains its existing public URL for the Friday lesson.
 
 The site is served from this repository root on GitHub Pages. New adventures can be added as separate folders under `aventuras/`; add a card to the selection page when an adventure is ready.
+
+## La maleta de noviembre — misión cultural TY
+
+Actividad autónoma por parejas en `maleta-de-noviembre/`, accesible desde la portada. Incluye cuatro misiones de vocabulario y comprensión, una visita guiada con tres fotos reales de Tosantos (con fuentes y créditos), un taller de calaveras por números integrado en el recorrido y una tarea creativa con modelo ilustrado, frases guiadas e informe descargable para Teams. Duración orientativa: 40–50 minutos.
+
+No requiere registro ni backend. El progreso se guarda en el navegador; para una pareja nueva, guardar primero el informe y usar la opción de reiniciar. Las fotos se sirven con la actividad. El acceso «Español en juego» permite volver al catálogo.
