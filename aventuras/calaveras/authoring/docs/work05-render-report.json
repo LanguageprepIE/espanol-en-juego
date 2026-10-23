@@ -1,0 +1,45 @@
+{
+  "renderer": "@napi-rs/canvas — CPU/offline",
+  "browserTested": false,
+  "iPadTested": false,
+  "frames": 720,
+  "performanceSamples": [
+    {
+      "scene": "inicio",
+      "meanMs": 1.43,
+      "p95Ms": 1.78,
+      "visiblePlatforms": 8
+    },
+    {
+      "scene": "terrazas",
+      "meanMs": 1.54,
+      "p95Ms": 1.91,
+      "visiblePlatforms": 7
+    },
+    {
+      "scene": "enemigos",
+      "meanMs": 1.35,
+      "p95Ms": 1.71,
+      "visiblePlatforms": 3
+    },
+    {
+      "scene": "instituto",
+      "meanMs": 1.15,
+      "p95Ms": 1.64,
+      "visiblePlatforms": 3
+    },
+    {
+      "scene": "plaza",
+      "meanMs": 1.65,
+      "p95Ms": 3.14,
+      "visiblePlatforms": 6
+    },
+    {
+      "scene": "puente",
+      "meanMs": 0.83,
+      "p95Ms": 1.07,
+      "visiblePlatforms": 7
+    }
+  ],
+  "runtimeBytes": 1799728
+}

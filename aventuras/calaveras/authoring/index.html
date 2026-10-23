@@ -1,6 +1,76 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#141626"><title>El camino de las calaveras</title><link rel="stylesheet" href="style.css"></head><body>
-<main><header><a class="brand" href="#">ESTUDIO CEMPASÚCHIL <span>UNA AVENTURA EN ESPAÑOL</span></a><div class="tools"><button id="sound" aria-pressed="false">Sonido: no</button><button id="touchToggle" aria-label="Mostrar u ocultar controles táctiles">Controles: auto</button><button id="help">Ayuda</button><button id="pause">Pausa</button><button id="full">Ampliar</button></div></header>
-<section id="stage" aria-label="Videojuego El camino de las calaveras"><canvas id="game" width="1280" height="720" tabindex="0" aria-label="Usa flechas o A y D para moverte, espacio para saltar, Mayúsculas para correr y E para activar"></canvas><div id="hud"><div><small id="phase">1 / 3 · EL SENDERO DE LAS FLORES</small><b id="zone">El despertar</b></div><div class="stats"><span id="lives">3 vidas</span><span id="flowers">0 flores</span><span id="lanterns">0 / 3 faroles</span></div></div><div id="message" role="status" aria-live="polite"></div><div id="prompt"></div>
-<div id="overlay"><div class="intro"><p class="eyebrow">NIVEL 01 · EL SENDERO DE LAS FLORES</p><h1>El camino<br>de las <em>calaveras</em></h1><p>Las flores brillan. El camino ha desaparecido.<br>Esta noche, los recuerdos te guían a casa.</p><p class="story">«Soy Luz. Enciende los tres faroles del recuerdo.<br>Sigue el cempasúchil… y no temas a la noche.»</p><button id="start" class="primary">Comenzar el camino <span>→</span></button><p class="controls">← → / A D moverse · Espacio saltar · Shift correr · E activar</p><small>Ordenador e iPad · Sin cuentas · Sin datos personales</small></div></div>
-<div id="touch"><div class="dpad"><button data-key="left" aria-label="Mover a la izquierda">←</button><button data-key="right" aria-label="Mover a la derecha">→</button></div><div class="actions"><button data-key="run" aria-label="Correr">Correr</button><button data-key="use" aria-label="Activar mecanismo">Hablar / E</button><button data-key="jump" aria-label="Saltar" class="jump">Saltar</button></div></div>
-</section><footer><span>Una noche para recordar. Un camino para volver.</span><span>Work 04 · Tres fases y personajes</span></footer></main><dialog id="helpDialog"><h2>Sigue las flores</h2><p>Enciende los <b>tres faroles</b> del recuerdo con E. Cada farol guarda tu progreso. Después cruza el puente y vuelve a casa.</p><p>Flechas / A D: moverse · Shift: correr<br>Espacio / W / ↑: saltar. Mantén para saltar más alto.<br>E / ↓: activar · P / Escape: pausa</p><p>Salta sobre los escarabajos. Esquiva las polillas. Las espinas, los abismos y los chorros de luz roja hacen daño.</p><p>La pluma turquesa te protege y permite un <b>segundo salto</b> durante 18 segundos. Se regenera. Busca una flor azul fuera del sendero.</p><details><summary>English support</summary><p>Light the three lanterns (E) to save progress and open the final bridge. Hold Jump for a higher jump. Jump on beetles; avoid moths, thorns and red light jets. A turquoise feather gives a shield and double jump for 18 seconds. Look for a blue flower off the main path.</p></details><p>Tres fases: el sendero de las flores, los faroles del recuerdo y el guardián y el regreso. Habla con Luz, Inés y Tomás con E / Hablar: sus preguntas son opcionales y dan recompensas. Al final, salta la ráfaga del Guardián; cuando baje las alas, salta sobre su cabeza y responde para liberar tres recuerdos. Equivocarse no quita vidas. Usa «Controles» para mostrar los botones táctiles.</p><p>El Día de Muertos celebra el recuerdo de los seres queridos. Esta aventura es fantástica, no representa un ritual real.</p><button id="closeHelp" class="primary">Volver al camino</button></dialog><dialog id="conversation" aria-labelledby="speaker"><div class="conversation-head"><canvas id="portrait" width="128" height="128" aria-hidden="true"></canvas><div><p class="eyebrow" id="conversationProgress"></p><h2 id="speaker"></h2></div></div><p id="conversationIntro"></p><h3 id="question"></h3><div id="answers"></div><p id="answerFeedback" role="status" aria-live="polite"></p><div class="conversation-actions"><button id="nextAnswer" class="primary" hidden>Continuar →</button><button id="leaveConversation">Seguir el camino</button></div></dialog><script type="module" src="src/main.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#141626">
+<title>El camino de las calaveras</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<header>
+<a class="brand" href="#">ESTUDIO CEMPASÚCHIL <span>UNA AVENTURA EN ESPAÑOL</span></a>
+<div class="tools">
+<button id="sound" aria-pressed="false">Sonido: no</button>
+<button id="touchToggle" aria-label="Mostrar u ocultar controles táctiles">Controles: auto</button>
+<button id="journey" disabled>Mapa</button>
+<button id="help">Ayuda</button><button id="pause">Pausa</button><button id="full">Ampliar</button>
+</div>
+</header>
+<section id="stage" aria-label="Videojuego El camino de las calaveras">
+<canvas id="game" width="1280" height="720" tabindex="0" aria-label="Usa flechas o A y D para moverte, espacio para saltar, Mayúsculas para correr y E para hablar o activar"></canvas>
+<div id="hud">
+<div class="location"><small id="phase">FASE 1 DE 3 · EL JARDÍN DE LOS RETRATOS</small><b id="zone">El despertar</b><span id="objective">Enciende el farol del jardín.</span><span id="keepsake"></span></div>
+<div class="stats"><span id="lives">3 vidas</span><span id="flowers">0 flores</span><span id="lanterns">0 / 3 faroles</span></div>
+</div>
+<div id="message" role="status" aria-live="polite"></div><div id="prompt"></div>
+<div id="overlay">
+<div class="intro">
+<p class="eyebrow">UNA AVENTURA · TRES LUGARES</p>
+<h1>El camino<br>de las <em>calaveras</em></h1>
+<p>Las flores brillan. El camino ha desaparecido.<br>Esta noche, los recuerdos te guían a casa.</p>
+<p class="story">Un jardín de retratos, un instituto de luces y una plaza misteriosa.<br>Enciende los tres faroles… y encuentra el camino de regreso.</p>
+<button id="start" class="primary" disabled>Preparando el camino…</button>
+<p class="controls">← → / A D moverse · Espacio saltar · Shift correr · E hablar / activar</p>
+<small>Habla con los guías cuando quieras · Conversaciones opcionales de dos preguntas</small>
+</div>
+</div>
+<div id="touch">
+<div class="dpad"><button data-key="left" aria-label="Mover a la izquierda">←</button><button data-key="right" aria-label="Mover a la derecha">→</button></div>
+<div class="actions"><button data-key="run" aria-label="Correr">Correr</button><button data-key="use" aria-label="Hablar o activar mecanismo">Hablar / E</button><button data-key="jump" aria-label="Saltar" class="jump">Saltar</button></div>
+</div>
+</section>
+<footer><span>Una noche para recordar. Un camino para volver.</span><span>Work 05 · Tres lugares, tres temas</span></footer>
+</main>
+<dialog id="helpDialog" aria-labelledby="helpTitle">
+<h2 id="helpTitle">Sigue las flores</h2>
+<p>Enciende los <b>tres faroles</b> del recuerdo con E. Cada farol guarda tu progreso y recupera tu energía. Después cruza el puente y libera al Guardián para volver a casa.</p>
+<p>Flechas / A D: moverse · Shift: correr<br>Espacio / W / ↑: saltar. Mantén para saltar más alto.<br>E / ↓: hablar o activar · P / Escape: pausa</p>
+<p>Salta sobre los escarabajos. Esquiva las polillas. Las espinas, los abismos y los chorros de luz roja hacen daño.</p>
+<p>La pluma turquesa te protege y permite un <b>segundo salto</b> durante 18 segundos. Se regenera.</p>
+<p>Luz, Inés y Tomás te acompañan por el jardín, el instituto y la plaza. Hay tres encuentros por zona, con dos preguntas cada uno. Puedes dejarlos y continuar después. Los errores no quitan vidas; las pistas en inglés son opcionales.</p>
+<p>El retrato, el cuaderno y el mapa son <b>recuerdos extra</b> en caminos alternativos. Dan flores y recuperan energía; no hacen falta para terminar.</p>
+<p>El Guardián avisa antes de lanzar una ráfaga. Sáltala. Cuando baje las alas, salta sobre su cabeza y recupera un recuerdo de cada tema.</p>
+<details><summary>English support</summary><p>Light all three lanterns (E). Hold Jump for a higher jump. A turquoise feather grants a shield and a double jump for 18 seconds. The nine optional conversations have two questions each; you can leave and return. Mistakes cost no lives. Jump over the Guardian's gust, then jump onto its head when its wings are down. Revisit one question from each chapter to open the way home.</p></details>
+<p>El Día de Muertos recuerda a los seres queridos fallecidos. El instituto encantado, los poderes y el Guardián pertenecen a esta aventura fantástica.</p>
+<button id="closeHelp" class="primary">Volver al camino</button>
+</dialog>
+<dialog id="journeyDialog" aria-labelledby="journeyTitle">
+<p class="eyebrow">EL MAPA DE LA AVENTURA</p>
+<h2 id="journeyTitle">Una noche. Tres lugares.</h2>
+<p>Enciende un farol en cada zona. Los guías y los recuerdos extra te ayudan por el camino.</p>
+<div id="journeyCards" class="chapter-grid"></div>
+<p class="journey-note">18 preguntas distintas · 6 por tema · 2 por encuentro opcional. El Guardián repasa una de cada tema al final.</p>
+<button id="closeJourney" class="primary">Volver al camino</button>
+</dialog>
+<dialog id="conversation" aria-labelledby="speaker">
+<div class="conversation-head"><canvas id="portrait" width="128" height="128" aria-hidden="true"></canvas><div><p class="eyebrow" id="conversationProgress"></p><h2 id="speaker"></h2></div></div>
+<p id="conversationIntro"></p><p id="questionContext"></p><h3 id="question"></h3>
+<div id="answers"></div>
+<details id="questionHint"><summary>Pista en inglés</summary><p id="hintText"></p></details>
+<p id="answerFeedback" role="status" aria-live="polite"></p><p id="conversationReward"></p>
+<div class="conversation-actions"><button id="nextAnswer" class="primary" hidden>Continuar →</button><button id="leaveConversation">Seguir el camino</button></div>
+</dialog>
+<script type="module" src="src/main.js"></script>
+</body></html>

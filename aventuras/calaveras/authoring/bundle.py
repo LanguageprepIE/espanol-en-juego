@@ -36,4 +36,5 @@ shutil.copytree(root/'assets/work02',dist/'assets/work02')
 if (root/'assets/work03').exists():shutil.copytree(root/'assets/work03',dist/'assets/work03')
 print('Built offline review HTML and dist/')
 
-if (root/'assets/work04').exists():shutil.copytree(root/'assets/work04',dist/'assets/work04')
+for work in ['work04','work05']:
+ if (root/('assets/'+work)).exists():shutil.copytree(root/('assets/'+work),dist/('assets/'+work),dirs_exist_ok=True)
