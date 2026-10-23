@@ -1,0 +1,48 @@
+{
+  "version": "Work 05",
+  "date": "2026-10-23",
+  "browser": "remote Chrome via CUA",
+  "standaloneBuildLaunched": true,
+  "manualInteraction": [
+    "Start button hides intro and begins game",
+    "Keyboard E opens Luz and Inés conversations",
+    "Wrong answer allows retry without losing lives",
+    "Optional English hint expands",
+    "Correct answer gives explanation",
+    "Leave and resume reaches question 2 and resets hint",
+    "Completing Luz grants one life",
+    "Show touch controls and pointer-activate Hablar opens conversation",
+    "Map displays all three renderer previews"
+  ],
+  "fullRun": {
+    "driver": "normal inputs at QA 32x; all nine optional conversations; automatic correct answers; no warps or health edits",
+    "mode": "win",
+    "steps": 10853,
+    "nodes": 54,
+    "lanterns": 3,
+    "lives": 6,
+    "flowers": 135,
+    "answered": 18,
+    "encounters": 9,
+    "memories": 3,
+    "phase": 3,
+    "simulatedSeconds": 90.19166666668451,
+    "jumps": 81,
+    "landings": 62,
+    "renderFrames": 74,
+    "wallSeconds": 64.9859
+  },
+  "isolatedPositionShortcutsUsed": true,
+  "errorsObserved": {
+    "game": [],
+    "browserExtension": [
+      "Error sending browser metadata to extension (outside game source)"
+    ]
+  },
+  "realIPadTested": false,
+  "safariTested": false,
+  "physicalMultiTouchTested": false,
+  "humanFullPlaythrough": false,
+  "desktop60fpsCertified": false,
+  "limits": "Remote browser rendered roughly one frame per second. QA simulates fixed-step movement; timing is not human reading or play time."
+}

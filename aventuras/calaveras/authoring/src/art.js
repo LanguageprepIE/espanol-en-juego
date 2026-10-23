@@ -4,4 +4,8 @@ export const ART={"files":[{"name":"hero","path":"assets/work03/hero.webp","byte
 ART.files.push({"name": "characters", "path": "assets/work04/characters.webp", "bytes": 149064, "width": 768, "height": 512, "alpha": true});
 ART.atlases.characters={"cols": 3, "rows": 2, "cell": 256, "anchor": {"x": 128, "y": 238}, "frames": [{"frame": 0, "bounds": {"x": 25, "y": 18, "w": 205, "h": 220}}, {"frame": 1, "bounds": {"x": 41, "y": 18, "w": 174, "h": 220}}, {"frame": 2, "bounds": {"x": 49, "y": 18, "w": 157, "h": 220}}, {"frame": 3, "bounds": {"x": 13, "y": 35, "w": 230, "h": 203}}, {"frame": 4, "bounds": {"x": 13, "y": 21, "w": 230, "h": 217}}, {"frame": 5, "bounds": {"x": 13, "y": 35, "w": 230, "h": 203}}]};
 ART.work=4;ART.runtimeBytes+=149064;
+// Work 05 themes
+ART.files.push(...[{"name":"school","path":"assets/work05/school.webp","bytes":270136,"width":1536,"height":684,"alpha":true},{"name":"plaza","path":"assets/work05/plaza.webp","bytes":299986,"width":1536,"height":684,"alpha":true},{"name":"props","path":"assets/work05/props.webp","bytes":125578,"width":768,"height":512,"alpha":true}]);
+ART.atlases.props={"cols":3,"rows":2,"cell":256,"anchor":{"x":128,"y":236},"frames":[{"frame":0,"bounds":{"x":45,"y":18,"w":166,"h":218}},{"frame":1,"bounds":{"x":29,"y":18,"w":198,"h":218}},{"frame":2,"bounds":{"x":19,"y":31,"w":218,"h":205}},{"frame":3,"bounds":{"x":30,"y":18,"w":196,"h":218}},{"frame":4,"bounds":{"x":34,"y":18,"w":187,"h":218}},{"frame":5,"bounds":{"x":19,"y":28,"w":218,"h":208}}]};
+ART.work=5;ART.runtimeBytes+=695700;ART.sourceBytes+=7172368;
 export const ASSET_FILES=Object.fromEntries(ART.files.map(f=>[f.name,f.path]));

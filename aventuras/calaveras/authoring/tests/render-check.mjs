@@ -1,0 +1,20 @@
+// Offline engine rendering and animation inspection. No browser/network access.
+import {createRequire} from 'node:module';import {writeFileSync,mkdirSync} from 'node:fs';import {performance} from 'node:perf_hooks';
+const localRequire=createRequire(import.meta.url);let canvasModule;try{canvasModule=localRequire('@napi-rs/canvas')}catch{canvasModule=createRequire((process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES||'/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules')+'/../package.json')('@napi-rs/canvas')}const {createCanvas,loadImage}=canvasModule;
+globalThis.matchMedia=()=>({matches:false});globalThis.document={createElement:()=>createCanvas(1,1)};
+const {Renderer}=await import('../src/render.js');const {Game}=await import('../src/game.js');const {ART,ASSET_FILES}=await import('../src/art.js');const {HERO_CLIPS,heroFrame,enemyFrame}=await import('../src/animation.js');
+const root=new URL('../',import.meta.url).pathname;const outputs=root+'qa-output';mkdirSync(outputs,{recursive:true});
+const assets={};await Promise.all(Object.entries(ASSET_FILES).map(async([name,file])=>assets[name]=await loadImage(root+file)));
+const canvas=createCanvas(1280,720),renderer=new Renderer(canvas,assets),g=new Game();g.reset();g.time=3;
+const scenes=[{name:'inicio',x:90,y:540,cam:0},{name:'terrazas',x:3750,y:345,cam:3350},{name:'enemigos',x:5800,y:540,cam:5340},{name:'instituto',x:9000,y:540,cam:8560},{name:'plaza',x:16680,y:540,cam:16240},{name:'puente',x:21800,y:323,cam:21300}];
+for(const s of scenes){g.p.x=s.x;g.p.y=s.y;g.p.state='idle';g.p.stateTime=0;g.camera=s.cam;renderer.draw(g);writeFileSync(`${outputs}/${s.name}.png`,canvas.toBuffer('image/png'));}
+renderer.debug=true;g.camera=3350;g.p.x=3740;g.p.y=345;renderer.draw(g);writeFileSync(`${outputs}/colisiones.png`,canvas.toBuffer('image/png'));renderer.debug=false;
+const c=canvas.getContext('2d');const states=Object.keys(HERO_CLIPS);c.fillStyle='#132238';c.fillRect(0,0,1280,720);
+for(let i=0;i<states.length;i++){const col=i%5,row=Math.floor(i/5),name=states[i];for(let j=0;j<2;j++){renderer.frame('hero',heroFrame(name,j/HERO_CLIPS[name].fps),col*245+24+j*84,row*270+45,128,128)}c.fillStyle='#ffda89';c.font='18px sans-serif';c.fillText(name,col*245+35,row*270+220)}
+writeFileSync(`${outputs}/acciones-alumno.png`,canvas.toBuffer('image/png'));
+// Gameplay render stress samples at several depths, 120 frames per scene.
+const performanceSamples=[];for(const s of scenes){g.camera=s.cam;g.p.x=s.x;g.p.y=s.y;const samples=[];for(let i=0;i<120;i++){g.time+=1/60;const t=performance.now();renderer.draw(g);samples.push(performance.now()-t)}samples.sort((a,b)=>a-b);performanceSamples.push({scene:s.name,meanMs:+(samples.reduce((a,b)=>a+b)/samples.length).toFixed(2),p95Ms:+samples[114].toFixed(2),visiblePlatforms:renderer.platformDraws});}
+// Filmstrip frames feed a lightweight animated GIF for visual review.
+const animDir=outputs+'/animation';mkdirSync(animDir,{recursive:true});const demo=createCanvas(960,480),d=demo.getContext('2d'),rr=new Renderer(demo,assets);
+for(let i=0;i<48;i++){d.fillStyle='#122137';d.fillRect(0,0,960,480);const t=i/12;d.font='18px sans-serif';d.fillStyle='#f2ce94';for(const [label,x,y]of[['Caminar',20,30],['Correr',250,30],['Escarabajo',490,30],['Polilla',725,30]])d.fillText(label,x,y);rr.frame('hero',heroFrame('walk',t),0,50,240,240);rr.frame('hero',heroFrame('run',t),240,50,240,240);const enemyState=t<2?'move':t<2.5?'windup':t<3?'attack':t<3.25?'hurt':'defeat';rr.frame('enemies',enemyFrame('beetle',enemyState,t<2?t:t%1),480,50,240,240);rr.frame('enemies',enemyFrame('moth',enemyState,t<2?t:t%1),720,50,240,240);d.fillStyle='#91aabd';d.font='15px sans-serif';d.fillText('Work 02 · Fotogramas integrados en el motor · '+(t<2?'movimiento':enemyState),22,410);writeFileSync(`${animDir}/${String(i).padStart(3,'0')}.png`,demo.toBuffer('image/png'));}
+const report={renderer:'@napi-rs/canvas — CPU/offline',browserTested:false,iPadTested:false,frames:scenes.length*120,performanceSamples,runtimeBytes:ART.runtimeBytes};writeFileSync(outputs+'/render-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

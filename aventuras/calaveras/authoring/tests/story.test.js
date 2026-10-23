@@ -1,9 +1,14 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {Game} from '../src/game.js';import {movePlayer,playerAt} from '../src/physics.js';
+test('the two chapter boundaries are announced and visibly start a new phase',()=>{
+ const notices=[],g=new Game(text=>notices.push(text));g.reset();assert.match(g.phase.name,/Fase 1 de 3/);
+ g.p.x=7901;g.p.y=540;g.p.ground=true;g.zone=3;g.update(1/120,{});assert.equal(g.phaseIndex,1);assert.match(g.phase.name,/Fase 2 de 3/);assert.ok(g.chapterTransition>4);assert.match(notices.at(-1),/El instituto de las luces/);
+ g.p.x=15901;g.p.y=540;g.p.ground=true;g.zone=5;g.update(1/120,{});assert.equal(g.phaseIndex,2);assert.match(g.phase.name,/Fase 3 de 3/);assert.match(notices.at(-1),/La plaza de los caminos/);
+});
 test('each raised feather route can be climbed without a power using actual jump physics',()=>{
  const g=new Game();for(const base of [2390,6800,13400]){const route=g.level.platforms.filter(a=>a.baseX>=base&&a.baseX<=base+520&&!a.solid&&a.y>=330&&a.y<=520).sort((a,b)=>a.x-b.x);assert.equal(route.length,3);let previous={x:base-160,y:602,w:200,h:160,solid:true};for(const target of route){const p=playerAt(previous.x+previous.w-40,previous.y-62);p.ground=true;let landed=false;for(let i=0;i<110;i++){movePlayer(p,{right:p.x<target.x+50,run:true,jump:true,jumpPressed:i===0},[previous,target],1/120);if(p.riding===target){landed=true;break}}assert.ok(landed,'reachable ledge '+target.x);previous=target;}}});
 test('NPC answers are gentle, freeze the world and reward exactly once',()=>{
- for(let i=0;i<3;i++){const g=new Game();g.reset();const n=g.npcs[i];g.p.x=n.x;g.p.y=540;g.update(1/120,{usePressed:true});assert.equal(g.mode,'dialogue');const elapsed=g.elapsed,hearts=g.hearts;g.update(4,{right:true});assert.equal(g.elapsed,elapsed);for(let j=0;j<2;j++){const q=g.conversation.question;assert.equal(g.answer((q.correct+1)%3),false);assert.equal(g.hearts,hearts);assert.equal(g.answer(q.correct),true);g.continueConversation()}assert.equal(g.mode,'play');assert.equal(n.done,true);const lives=g.lives;g.talk(n);assert.equal(g.lives,lives);assert.equal(g.mode,'play');}
+ for(let i=0;i<9;i++){const g=new Game();g.reset();const n=g.npcs[i];g.p.x=n.x;g.p.y=540;g.update(1/120,{usePressed:true});assert.equal(g.mode,'dialogue');const elapsed=g.elapsed,hearts=g.hearts;g.update(4,{right:true});assert.equal(g.elapsed,elapsed);for(let j=0;j<2;j++){const q=g.conversation.question;assert.equal(g.answer((q.correct+1)%3),false);assert.equal(g.hearts,hearts);assert.equal(g.answer(q.correct),true);g.continueConversation()}assert.equal(g.mode,'play');assert.equal(n.done,true);const lives=g.lives;g.talk(n);assert.equal(g.lives,lives);assert.equal(g.mode,'play');}
 });
 test('guardian requires an exposed descending stomp and three correct memories',()=>{
  const g=new Game();g.reset();g.level.enemies=[];g.level.lanterns.forEach(l=>l.on=true);g.p.x=22700;g.update(1/120,{});assert.equal(g.boss.active,true);assert.equal(g.checkpoint.x,22620);

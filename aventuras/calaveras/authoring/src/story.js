@@ -1,17 +1,47 @@
-export const PHASES=[{x:0,name:'1 / 3 · El sendero de las flores'},{x:7900,name:'2 / 3 · Los faroles del recuerdo'},{x:15900,name:'3 / 3 · El guardián y el regreso'}];
+// One continuous adventure, three visibly different places. Educational content
+// is authored here, without an account or a remote service.
+export const PHASES=[
+ {number:1,x:0,name:'Fase 1 de 3 · El jardín de los retratos',title:'El jardín de los retratos',topic:'Descripciones y familia',subtitle:'Las personas que recordamos',objective:'Enciende el farol del jardín.',extra:'Busca un retrato en el camino alto.',mood:'marigold',scene:'garden',guide:'Luz',fact:'Las flores de cempasúchil adornan muchas ofrendas dedicadas a los seres queridos.'},
+ {number:2,x:7900,name:'Fase 2 de 3 · El instituto de las luces',title:'El instituto de las luces',topic:'El instituto',subtitle:'Un patio lleno de historias',objective:'Sube a las terrazas y enciende el segundo farol.',extra:'Recupera el cuaderno de Inés.',mood:'teal',scene:'school',guide:'Inés',fact:'Las ofrendas pueden incluir fotos y objetos que recuerdan la vida de una persona.'},
+ {number:3,x:15900,name:'Fase 3 de 3 · La plaza de los caminos',title:'La plaza de los caminos',topic:'La ciudad y las direcciones',subtitle:'Todas las calles guardan un recuerdo',objective:'Enciende el último farol y cruza el puente.',extra:'Encuentra el mapa y libera al Guardián de la Niebla.',mood:'violet',scene:'plaza',guide:'Tomás',fact:'El Día de Muertos reúne recuerdos de los seres queridos; las costumbres varían entre familias y comunidades.'}
+];
+export const phaseAt=x=>PHASES.findLast(p=>x>=p.x)||PHASES[0];
+// A spatial crossfade also works when returning to an earlier chapter.
+export function sceneWeights(x){const weights=[1,0,0];for(let i=1;i<PHASES.length;i++){const raw=Math.max(0,Math.min(1,(x-PHASES[i].x+220)/440)),w=raw*raw*(3-2*raw);weights[i-1]*=1-w;weights[i]=w;}return weights;}
+
+export const QUESTION_BANK=[
+ {id:'d1',topic:1,context:'Luz busca a un alumno: «Lleva una sudadera azul y pantalones oscuros».',text:'¿Qué ropa lleva?',options:['Una sudadera azul.','Una camiseta roja.','Un abrigo verde.'],correct:0,hint:'Lleva = is wearing. Sudadera = hoodie.',explanation:'Lleva una sudadera azul. «Llevar» sirve para hablar de la ropa.'},
+ {id:'d2',topic:1,context:'Un retrato tiene una nota: «Yo ___ el pelo castaño».',text:'¿Qué palabra completa la descripción?',options:['soy','tengo','estoy'],correct:1,hint:'Use tener for hair and eyes: tengo el pelo…',explanation:'Tengo el pelo castaño. Usamos «tener» para describir el pelo.'},
+ {id:'d3',topic:1,context:'Luz quiere saber cómo es tu amigo.',text:'¿Qué respuesta describe su personalidad?',options:['Tiene quince años.','Vive cerca del instituto.','Es amable y divertido.'],correct:2,hint:'Personalidad = what someone is like as a person.',explanation:'«Amable» y «divertido» describen la personalidad.'},
+ {id:'d4',topic:1,context:'Luz y su hermana ayudan a todos los viajeros.',text:'Completa: «Las dos son muy ___».',options:['simpáticas','simpático','simpática'],correct:0,hint:'Las dos = both girls. The adjective is feminine and plural.',explanation:'Las dos son simpáticas: femenino y plural.'},
+ {id:'d5',topic:1,context:'Hay retratos de varias generaciones en el jardín.',text:'La hermana de mi madre es mi…',options:['abuela.','tía.','prima.'],correct:1,hint:'Madre = mother. Hermana = sister.',explanation:'La hermana de tu madre es tu tía.'},
+ {id:'d6',topic:1,context:'«Hoy estoy cansada porque he caminado mucho», dice Luz.',text:'¿Cómo se siente Luz?',options:['Enfadada.','Nerviosa.','Cansada.'],correct:2,hint:'Cansada = tired. Enfadada = angry. Nerviosa = nervous.',explanation:'Luz está cansada. «Estoy cansada» expresa cómo se siente hoy.'},
+ {id:'s1',topic:2,context:'Inés quiere leer y estudiar en silencio.',text:'¿Adónde va en el instituto?',options:['A la biblioteca.','Al comedor.','Al gimnasio.'],correct:0,hint:'Leer = to read. En silencio = quietly.',explanation:'La biblioteca es un lugar para leer y estudiar.'},
+ {id:'s2',topic:2,context:'Horario del jueves: 9:00 Matemáticas · 10:00 Español · 11:00 Música.',text:'¿Qué asignatura hay antes de Español?',options:['Música.','Matemáticas.','Historia.'],correct:1,hint:'Antes de = before. Asignatura = school subject.',explanation:'Matemáticas es a las nueve, antes de Español.'},
+ {id:'s3',topic:2,context:'Inés te cuenta su opinión sobre las asignaturas.',text:'Completa: «Me gustan las ciencias porque son ___».',options:['interesante','interesado','interesantes'],correct:2,hint:'Las ciencias is plural. The adjective must agree.',explanation:'Las ciencias son interesantes: el adjetivo va en plural.'},
+ {id:'s4',topic:2,context:'«Las clases empiezan a las ocho y media», explica Inés.',text:'¿A qué hora empiezan?',options:['A las 8:30.','A las 8:15.','A las 9:30.'],correct:0,hint:'Y media = half past. Y cuarto = quarter past.',explanation:'Las ocho y media son las 8:30.'},
+ {id:'s5',topic:2,context:'Un cartel del aula dice: «Hay que escuchar al profesor».',text:'¿Qué debes hacer en clase?',options:['Hablar sin escuchar.','Escuchar al profesor.','Salir durante la explicación.'],correct:1,hint:'Hay que = you must. Escuchar = to listen.',explanation:'Hay que escuchar al profesor: es una norma del aula.'},
+ {id:'s6',topic:2,context:'Inés recuerda lo que hizo para preparar un examen.',text:'Completa: «Ayer ___ para el examen».',options:['estudio','estudiaré','estudié'],correct:2,hint:'Ayer = yesterday. Use a past tense for a finished action.',explanation:'Ayer estudié: «estudié» habla de una acción terminada en el pasado.'},
+ {id:'c1',topic:3,context:'Tomás quiere comprar pan para la cena.',text:'¿A qué tienda va?',options:['A la panadería.','A la farmacia.','A la librería.'],correct:0,hint:'Pan = bread. A bakery is una panadería.',explanation:'En la panadería se compra pan.'},
+ {id:'c2',topic:3,context:'«Sigue todo recto y gira a la izquierda», indica Tomás.',text:'¿Hacia dónde giras al final?',options:['A la derecha.','A la izquierda.','No giras.'],correct:1,hint:'Todo recto = straight ahead. Izquierda = left.',explanation:'Primero sigues recto; después giras a la izquierda.'},
+ {id:'c3',topic:3,context:'«Voy al centro en autobús porque está lejos», dice Tomás.',text:'¿Cómo va al centro?',options:['A pie.','En bicicleta.','En autobús.'],correct:2,hint:'¿Cómo va? asks about transport. Lejos = far away.',explanation:'Va en autobús. «En autobús» indica el medio de transporte.'},
+ {id:'c4',topic:3,context:'Tomás quiere ver una película esta tarde.',text:'¿Adónde le recomiendas ir?',options:['Al cine.','Al hospital.','Al polideportivo.'],correct:0,hint:'Película = film. Cine = cinema.',explanation:'Para ver una película puede ir al cine.'},
+ {id:'c5',topic:3,context:'La biblioteca está enfrente del parque.',text:'¿Dónde está la biblioteca?',options:['Dentro del parque.','Enfrente del parque.','Detrás del parque.'],correct:1,hint:'Enfrente de = opposite. Detrás de = behind.',explanation:'«Enfrente del parque» significa al otro lado, frente al parque.'},
+ {id:'c6',topic:3,context:'El mapa muestra un museo que Tomás quiere conocer.',text:'Completa: «Mañana voy a ___ el museo».',options:['visité','visito','visitar'],correct:2,hint:'Voy a + infinitive expresses a plan: I am going to…',explanation:'Mañana voy a visitar el museo: «ir a + infinitivo» expresa un plan.'}
+];
+function encounter(id,name,x,frame,topic,label,intro,ids,rewardKind,reward){return{id,name,x,y:512,w:48,h:90,frame,topic,label,intro,questions:ids.map(id=>QUESTION_BANK.find(q=>q.id===id)),rewardKind,reward};}
+// Each familiar guide accompanies the player through three safe resting places.
+// Two questions per stop; every stop can be skipped or left and resumed.
 export const NPCS=[
- {id:'luz',name:'Luz',x:280,y:512,w:48,h:90,frame:0,reward:'Una vida extra',intro:'¡Hola! Soy Luz. Te ayudo a encontrar el camino.',questions:[
-  {text:'¿Cómo estás?',options:['Estoy bien, gracias.','Son las ocho.','Es azul.'],correct:0},
-  {text:'¿De qué color es tu sudadera?',options:['Roja.','Azul.','Verde.'],correct:1}]},
- {id:'ines',name:'Inés',x:7950,y:512,w:48,h:90,frame:1,reward:'Energía y una pluma de luz',intro:'Cuido estas flores para recordar a las personas que queremos.',questions:[
-  {text:'¿Qué recoges en el camino?',options:['Libros.','Flores.','Zapatos.'],correct:1},
-  {text:'Hay tres faroles. Enciendes uno. ¿Cuántos faltan?',options:['Cinco.','Uno.','Dos.'],correct:2}]},
- {id:'tomas',name:'Tomás',x:16680,y:512,w:48,h:90,frame:2,reward:'Energía y una vida extra',intro:'El Guardián de la Niebla oculta la salida. Espera a que baje las alas y salta sobre su cabeza.',questions:[
-  {text:'¿Adónde quieres volver?',options:['A casa.','Soy estudiante.','Hace frío.'],correct:0},
-  {text:'¿Qué dices cuando alguien te ayuda?',options:['Buenas noches.','Gracias.','Tengo hambre.'],correct:1}]}
+ encounter('luz','Luz',280,0,1,'Ropa y aspecto','¡Hola! Soy Luz. En el jardín recordamos a las personas que queremos. ¿Me ayudas a reconocer a un viajero?',['d1','d2'],'life','Una vida extra'),
+ encounter('luz-personalidad','Luz',3400,0,1,'Personalidad','¡Has llegado al jardín alto! Los retratos nos recuerdan también cómo eran las personas, no solo su aspecto.',['d3','d4'],'flowers','Ocho flores y energía'),
+ encounter('luz-familia','Luz',6490,0,1,'Familia','Antes de ir al instituto, descansa conmigo. Las familias comparten recuerdos de formas diferentes. Busca un retrato en el camino alto.',['d5','d6'],'flowers','Ocho flores y energía'),
+ encounter('ines','Inés',8030,1,2,'Lugares y horario','¡Bienvenido al instituto de las luces! Aquí cada aula guarda una historia. Te enseño el patio y el horario.',['s1','s2'],'power','Energía y una pluma de luz'),
+ encounter('ines-clases','Inés',12400,1,2,'Asignaturas y horas','¿Has visto las terrazas del instituto? Descansa conmigo y hablemos de las clases.',['s3','s4'],'flowers','Ocho flores y energía'),
+ encounter('ines-recuerdos','Inés',14400,1,2,'Normas y el pasado','Mi cuaderno está en una de las terrazas. Si lo encuentras, recuperamos otra pequeña historia del instituto.',['s5','s6'],'life','Una vida extra'),
+ encounter('tomas','Tomás',16680,2,3,'Tiendas y direcciones','Soy Tomás. Bienvenido a la plaza. Puedo ayudarte a encontrar el camino entre las tiendas y las calles.',['c1','c2'],'flowers','Ocho flores y energía'),
+ encounter('tomas-ciudad','Tomás',19080,2,3,'Transporte y ocio','Ya se ve el puente. En la plaza puedes ir a muchos sitios. ¿Cómo viajarías por la ciudad?',['c3','c4'],'flowers','Ocho flores y energía'),
+ encounter('tomas-regreso','Tomás',20580,2,3,'Lugares y planes','Recoge la pluma antes del puente. El Guardián de la Niebla baja las alas después de lanzar su ráfaga: entonces puedes saltar sobre su cabeza.',['c5','c6'],'life','Una vida extra')
 ];
-export const GUARDIAN_QUESTIONS=[
- {text:'Completa: «Yo ___ estudiante».',options:['eres','es','soy'],correct:2},
- {text:'¿Qué celebramos con los faroles del recuerdo?',options:['El recuerdo de las personas que queremos.','Un examen.','Un partido de fútbol.'],correct:0},
- {text:'Completa: «Quiero volver a ___».',options:['azul','casa','tres'],correct:1}
-];
+// The finale revisits one question from each chapter, not a fourth topic.
+export const GUARDIAN_QUESTIONS=[QUESTION_BANK[2],QUESTION_BANK[11],QUESTION_BANK[17]];
