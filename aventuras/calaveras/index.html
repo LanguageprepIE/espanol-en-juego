@@ -25,6 +25,47 @@ body.touch-on #stage{touch-action:none}@media(max-width:520px){header{height:aut
 #journeyDialog{width:min(1120px,95vw);max-width:1120px;max-height:92dvh;overflow:auto;padding:24px}#journeyDialog h2{margin:6px 0 12px}.chapter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0}.chapter-grid article{border:1px solid #c7a26b33;border-radius:12px;overflow:hidden;background:#11182b}.chapter-grid canvas{display:block;width:100%;height:auto;aspect-ratio:16/9}.chapter-grid article>div{padding:15px}.chapter-grid small{color:#d9b16f;font-size:10px;line-height:1.5}.chapter-grid h3{font:23px/1.15 Georgia,serif;margin:10px 0 13px}.chapter-grid p{font-size:13px;line-height:1.5;margin:8px 0}.chapter-grid .extra{color:#b4dbd4}.chapter-grid .cultural-note{font-size:11px;color:#a9a8b6;border-top:1px solid #ffffff12;padding-top:11px;margin-top:13px}.journey-note{font-size:12px;color:#b3b7c8}#prompt{top:25%}
 @media(max-width:800px){#objective{font-size:9px;margin-top:3px}#keepsake{display:none}.chapter-grid{grid-template-columns:1fr}.chapter-grid article{display:grid;grid-template-columns:40% 1fr;align-items:center}.chapter-grid article>div{padding:12px}.chapter-grid h3{font-size:21px}.chapter-grid canvas{height:100%;object-fit:cover}.chapter-grid .cultural-note{display:none}#questionContext{font-size:14px}}
 @media(max-height:500px){#conversationIntro{font-size:12px}#questionContext{padding:6px 10px;margin:7px 0;font-size:14px}#conversationReward{margin:6px 0;font-size:11px}.chapter-grid .extra{display:none}}
+
+/* Work 06: reserve real space for interface panels in portrait layouts.
+   The canvas stays 1280 x 720; only its CSS display size changes. */
+#stage{display:grid;grid-template-areas:"view";aspect-ratio:auto}
+#game{grid-area:view;width:100%;height:auto;aspect-ratio:16/9;min-width:0;min-height:0;touch-action:none}
+#hud,#overlay,#prompt,#touch,#message{grid-area:view}
+body #stage,body.touch-on #stage{touch-action:pan-y}
+#overlay{overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
+#stage:fullscreen,body.expanded #stage{width:100vw;height:100dvh;max-height:none;grid-template-rows:minmax(0,1fr)}
+#stage:fullscreen #game,body.expanded #game{width:100%;height:100%;object-fit:contain}
+
+@media(max-width:1100px) and (orientation:portrait){
+ #stage{grid-template-areas:"hud" "view" "prompt" "controls" "message";grid-template-rows:auto auto auto auto auto}
+ #stage #hud{grid-area:hud;position:static;min-height:104px;padding:12px 16px;gap:12px;background:#141b2c;border-bottom:1px solid #ffffff12}
+ #stage .location{min-width:0;max-width:58%}
+ #stage #hud small{font-size:9px;letter-spacing:1px;line-height:1.5}
+ #stage #hud b{font-size:18px;line-height:1.2}
+ #stage #objective{font-size:11px;line-height:1.4;margin-top:5px}
+ #stage .stats{max-width:45%;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+ #stage #prompt{grid-area:prompt;position:static;transform:none;min-height:52px;display:flex;align-items:center;justify-content:center;width:auto;padding:8px 14px;font-size:13px;line-height:1.4;color:#ffe4a0;background:#141b2c;text-shadow:none;pointer-events:none}
+ #stage #touch{grid-area:controls;position:static;inset:auto;padding:10px 16px 12px;gap:12px;background:#141b2c;border-top:1px solid #ffffff0c}
+ #stage #message{grid-area:message;position:static;inset:auto;transform:none;max-width:none;width:auto;margin:0;min-height:4.5em;padding:12px 18px;border:0;border-top:1px solid #eec67d22;border-radius:0;font-size:14px;line-height:1.45;text-align:center;overflow-wrap:anywhere;background:#171e30}
+ #stage #overlay{grid-area:view}
+ #stage:fullscreen,body.expanded #stage{grid-template-rows:auto minmax(0,1fr) auto auto auto}
+ #stage:fullscreen #touch,body.expanded #touch{padding-bottom:max(12px,env(safe-area-inset-bottom))}
+ .intro .controls{display:none}
+ @media(max-width:520px){
+  #stage #hud{padding:10px;gap:8px}
+  #stage #hud b{font-size:14px}
+  #stage #hud small{font-size:8px;letter-spacing:.4px}
+  #stage .stats{gap:4px}
+  #stage .stats span{font-size:9px;padding:5px 6px}
+  #stage #objective{font-size:10px}
+  #stage #prompt{font-size:12px;padding:7px 10px;min-height:48px}
+  #stage #touch{padding:10px;gap:8px}
+  #stage #message{font-size:13px;padding:10px 12px;min-height:4.8em}
+  #stage #overlay{padding:4% 5%}
+  .intro h1{font-size:28px;margin:10px 0;letter-spacing:-1px}
+  .intro small{display:none}
+ }
+}
 </style>
 </head>
 <body>
@@ -444,6 +485,9 @@ function notify(text,seconds=4){$('#message').textContent=text;$('#message').cla
 const game=new Game(notify,tone);
 function pause(onlyPause=false){if(game.mode==='play'){game.mode='paused';input.clear();showPause()}else if(game.mode==='paused'&&!onlyPause)resume();}
 const input=new Input(pause);
+// Rotation repositions the controls; discard held inputs without resetting progress.
+const portraitLayout=matchMedia('(max-width:1100px) and (orientation:portrait)');
+portraitLayout.addEventListener('change',()=>input.clear());
 let touchMode='auto';
 $('#touchToggle').onclick=()=>{touchMode=touchMode==='auto'?'on':touchMode==='on'?'off':'auto';document.body.classList.toggle('touch-on',touchMode==='on');document.body.classList.toggle('touch-off',touchMode==='off');$('#touchToggle').textContent='Controles: '+({auto:'auto',on:'sí',off:'no'}[touchMode]);input.clear();canvas.focus()};
 const conversationDialog=$('#conversation');let conversationKey='';
