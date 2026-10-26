@@ -11,6 +11,9 @@ function notify(text,seconds=4){$('#message').textContent=text;$('#message').cla
 const game=new Game(notify,tone);
 function pause(onlyPause=false){if(game.mode==='play'){game.mode='paused';input.clear();showPause()}else if(game.mode==='paused'&&!onlyPause)resume();}
 const input=new Input(pause);
+// Rotation repositions the controls; discard held inputs without resetting progress.
+const portraitLayout=matchMedia('(max-width:1100px) and (orientation:portrait)');
+portraitLayout.addEventListener('change',()=>input.clear());
 let touchMode='auto';
 $('#touchToggle').onclick=()=>{touchMode=touchMode==='auto'?'on':touchMode==='on'?'off':'auto';document.body.classList.toggle('touch-on',touchMode==='on');document.body.classList.toggle('touch-off',touchMode==='off');$('#touchToggle').textContent='Controles: '+({auto:'auto',on:'sí',off:'no'}[touchMode]);input.clear();canvas.focus()};
 const conversationDialog=$('#conversation');let conversationKey='';
